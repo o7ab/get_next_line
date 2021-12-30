@@ -1,32 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oabushar <oabushar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:46:06 by oabushar          #+#    #+#             */
-/*   Updated: 2021/12/30 12:06:24 by oabushar         ###   ########.fr       */
+/*   Updated: 2021/12/23 09:48:59 by oabushar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*get_next_line(int fd)
 {
 	char		*res;
-	static char	*store;
+	static char	*store[1024];
 
-	if (fd < 0 && BUFFER_SIZE <= 0 && BUFFER_SIZE > 256)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd > 1024)
 		return (NULL);
-	store = gnl_helper(store, fd);
-	if (!store)
+	store[fd] = gnl_helper(store[fd], fd);
+	if (!store[fd])
 	{
-		free(store);
+		free(store[fd]);
 		return (NULL);
 	}
-	res = ft_strdup(store);
-	store = ft_get_after_nl(store);
+	res = ft_strdup(store[fd]);
+	store[fd] = ft_get_after_nl(store[fd]);
 	return (res);
 }
 
